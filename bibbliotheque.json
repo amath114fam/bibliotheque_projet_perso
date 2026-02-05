@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "titre": "Une vie",
+        "auteur": "Maupassant",
+        "disponible": "indisponible"
+    },
+    {
+        "id": 2,
+        "titre": "L'étranger",
+        "auteur": "Albert Camus",
+        "disponible": "disponible"
+    },
+    {
+        "id": 3,
+        "titre": "Une vie de boy",
+        "auteur": "Camara laye",
+        "disponible": "disponible"
+    },
+    {
+        "id": 4,
+        "titre": "l'égo est l'ennemi",
+        "auteur": "Pierraud",
+        "disponible": "disponible"
+    },
+    {
+        "id": 5,
+        "titre": "Mes rêves",
+        "auteur": "Amath Fam",
+        "disponible": "disponible"
+    }
+]
