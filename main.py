@@ -1,4 +1,6 @@
 import json
+import csv
+from datetime import date
 def menu():
     print("-" * 30)
     print("1. Afficher la bibliothèque")
@@ -35,6 +37,7 @@ def retour_au_menu():
             break
         else:
             print("Choix invalide") 
+#***********************************************************************************************#
 #Fonction pour ajouter livre
 def ajouter_livre():
     """Ajouter un livre"""
@@ -89,7 +92,7 @@ def rechercher_livre():
         print(f"{titre_du_livre} de {auteur}")
     else:
         print("Ce livre n'existe pas")
-
+#***********************************************************************************************#
 def supprimer_livre():
     """Fonction pour supprimmer un livre"""
     vue = False
@@ -133,6 +136,7 @@ def supprimer_livre():
                 break
             else:
                 print("Choix invalide") 
+#***********************************************************************************************#
 def emprunter_livre():
     """Fonction pour emprunter un """
     print("Bienvenue dans la bibliothèque")
@@ -142,20 +146,30 @@ def emprunter_livre():
         numero= input("Chosissez le numéro du livre que vous voulez emprunter N° : ").strip()
         print("-" * 4)
         try:
+            trouve = False
             for element in bibliotheque:
                 if int(numero) == element["id"]:
+                    trouve = True
                     if element["disponible"] == "disponible":
-                        a_emprunter = element
                         bibliotheque[element["id"] - 1]["disponible"] = "indisponible"
                         save()
-                        print(f"le livre {a_emprunter["titre"]} de {a_emprunter["auteur"]} est emprunté avec succès!!")
+                        nom_fichier = f"emprunt_{date.today()}.csv"
+
+                        with open(nom_fichier, mode="w", newline="", encoding="utf-8") as fichier:
+                            writer = csv.writer(fichier)
+
+                            writer.writerow(["Titre", "Auteur", "ID"])
+
+                            writer.writerow([element["titre"], element["auteur"], element["id"]])
+
+                        print(f"Export réussi  {nom_fichier}")
+                        print(f"le livre {element["titre"]} de {element["auteur"]} est emprunté avec succès!!")
                         print("-" * 10)
                     else:
                         print("Le livre est indisponible")
-                        break
-                else:
-                    print("Le numéro de l'identifiant enregistré n'existe pas dans la bibliothèque")
                     break
+            if not trouve:
+                print("Le numéro de l'identifiant enregistré n'existe pas dans la bibliothèque")
             #     print(f"le livre {a_emprunter["titre"]} de {a_emprunter["auteur"]} est emprunté avec succès!!")
             #     print("-" * 10)
             # else:
@@ -173,7 +187,7 @@ def emprunter_livre():
         except ValueError:
             print("Veillez-choisir uniquement un chiffre ou un nombre")
             print("-" * 10)
-            print("1. Supprimer un autre livre")
+            print("1. emprunter un autre livre")
             print("2. Retour au menu")
             choice = input("Choisis 1 ou 2 : ").replace(" ", "")
             if choice == "1":
@@ -182,6 +196,57 @@ def emprunter_livre():
                 break
             else:
                 print("Choix invalide") 
+#***********************************************************************************************#
+def retourner_livre():
+    """Retourner un livre"""
+    print("Bienvenue dans la bibliothèque")
+    print("-" * 4)
+    biblios()
+    while True:
+        numero= input("Chosissez le numéro du livre que vous voulez retourner N° : ").strip()
+        print("-" * 4)
+        try:
+            trouve = False
+            for element in bibliotheque:
+                if int(numero) == element["id"]:
+                    trouve = True
+                    if element["disponible"] == "indisponible":
+                        bibliotheque[element["id"] - 1]["disponible"] = "disponible"
+                        save()
+                        print(f"le livre {element["titre"]} de {element["auteur"]} est retourné avec succès!!")
+                        print("-" * 10)
+                    else:
+                        print("Le livre est disponible")
+                    break
+            if not trouve:
+                print("Le numéro de l'identifiant enregistré n'existe pas dans la bibliothèque")
+            #     print(f"le livre {a_emprunter["titre"]} de {a_emprunter["auteur"]} est emprunté avec succès!!")
+            #     print("-" * 10)
+            # else:
+                
+            print("-" * 10)
+            print("1. Retourner un livre")
+            print("2. Retour au menu")
+            choice = input("Choisis 1 ou 2 : ").replace(" ", "")
+            if choice == "1":
+                continue
+            elif choice == "2":
+                break
+            else:
+                print("Choix invalide") 
+        except ValueError:
+            print("Veillez-choisir uniquement un chiffre ou un nombre")
+            print("-" * 10)
+            print("1. Retourner un livre")
+            print("2. Retour au menu")
+            choice = input("Choisis 1 ou 2 : ").replace(" ", "")
+            if choice == "1":
+                continue
+            elif choice == "2":
+                break
+            else:
+                print("Choix invalide") 
+#***********************************************************************************************#
 while True:
     choix = menu()
     match choix:
@@ -216,7 +281,7 @@ while True:
             print("-" * 10)
         case "6":
             print("-" * 10)
-            print("C'est pour retourner un livre")
+            retourner_livre()
             print("-" * 10)
         case _:
             exit()
